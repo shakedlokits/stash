@@ -77,13 +77,16 @@ This backlog contains both current and future development items, feel free to ta
       - [ ] Create note
       - [ ] Delete note
       - [ ] Update note
-   - [ ] Markdown front-matter parser
+   - [x] Markdown front-matter parser (get-id)
    - [ ] Push command shell script
+   - [ ] Push command tests
    - [ ] Pull command shell script
+   - [ ] Pull command tests
    - [ ] `Bashly` setup
-      - [ ] CLI interface
+      - [x] CLI interface
       - [ ] Shell completion
       - [ ] Documentation
+      - [x] Approval testing
 - [ ] Nice to have
    - [ ] Diff changes (requires design)
    - [ ] Attachments support

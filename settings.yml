@@ -1,0 +1,176 @@
+#-------------------------------------------------------------------------------
+# BASHLY SETTINGS
+#-------------------------------------------------------------------------------
+#
+### Default Values
+#
+#   All settings are optional, with their default values provided below
+#
+### Environment Variables
+#
+#   Values can also be set using an environment variable with the same name,
+#   capitalized and prefixed by `BASHLY_` - for example: `BASHLY_SOURCE_DIR`
+#
+#   When setting environment variables, you can use:
+#   - "0", "false" or "no" to represent false
+#   - "1", "true" or "yes" to represent true
+#
+#   Environment variables take precedence over values in the config file.
+#
+### File Location:
+#
+#   Bashly looks for the settings file in these locations.
+#   - The path defined in the `BASHLY_SETTINGS_PATH` environment variable.
+#   - A file named `bashly-settings.yml` in the working directory.
+#   - A file named `settings.yml` in the working directory.
+#
+### Environment Overrides:
+#
+#   All options (except `env`) may be specified with an environment suffix in 
+#   order to override its value for a given environment.
+#
+#   For example, when defining `formatter_production: shfmt --minify`, then 
+#   this will be the formatter used when generating the script with
+#   `bashly generate --env production`
+#
+#   Since these values take precedence over the standard values, you can define
+#   both (i.e. `formatter: shfmt` and `formatter_production: shfmt --minify`).
+#
+
+#-------------------------------------------------------------------------------
+# PATH OPTIONS
+#-------------------------------------------------------------------------------
+
+# The path containing the bashly source files
+source_dir: src
+
+# The path to bashly.yml
+config_path: "%{source_dir}/bashly.yml"
+
+# The path to use for creating the bash script
+target_dir: dist
+
+# The path to use for common library files, relative to source_dir
+lib_dir: lib
+
+# An array or comma delimited string of additional directories to search for
+# bash functions. Any bash script found in any of these directories
+# (or sub-directories) will be merged into the final script.
+# Note that this is relative to the working directory.
+extra_lib_dirs: ~
+
+# The path to use for command files, relative to source_dir
+# When set to nil (~), command files will be placed directly under source_dir
+# When set to any other string, command files will be placed under this
+# directory, and each command will get its own sub-directory
+commands_dir: ~
+
+# The extension to use when reading/writing partial script snippets
+partials_extension: sh
+
+
+#-------------------------------------------------------------------------------
+# FORMAT OPTIONS
+#-------------------------------------------------------------------------------
+
+# Configure the bash options that will be added to the initialize function:
+# strict: true       # Bash strict mode (set -euo pipefail)
+# strict: false      # Only exit on errors (set -e)
+# strict: ''         # Do not add any 'set' directive
+# strict: <string>   # Add any other custom 'set' directive
+strict: false
+
+# When true, the generated script will use tab indentation instead of spaces
+# (every 2 leading spaces will be converted to a tab character)
+tab_indent: false
+
+# Choose a post-processor for the generated script:
+# formatter: internal     # Use Bashly’s built-in formatter (removes extra newlines)
+# formatter: external     # Run the external command `shfmt --case-indent --indent 2`
+# formatter: none         # Disable formatting entirely
+# formatter: <string>     # Provide a custom shell command to format the script.
+#                         # The command receives the script via stdin and must
+#                         # write the result to stdout.
+#                         # Example: shfmt --minify
+formatter: internal
+
+
+#-------------------------------------------------------------------------------
+# INTERFACE OPTIONS
+#-------------------------------------------------------------------------------
+
+# When true, the generated script will consider any argument in the form of
+# `-abc` as if it is `-a -b -c`.
+compact_short_flags: true
+
+# When true, the generated script will consider any argument in the form of
+# `--flag=value` and `-f=value` as if it is `--flag value` and `-f value`
+# respectively.
+conjoined_flag_args: true
+
+# Show command examples (if any) whenever the user does not provide the
+# required arguments
+show_examples_on_error: false
+
+# When using private commands, flags, or environment variables, you may set 
+# this option to a name of an environment variable that, if set, will reveal
+# all the private elements in the usage texts, as if they were public.
+private_reveal_key: ~
+
+# Display various usage elements in color by providing the name of the color
+# function. The value for each property is a name of a function that is
+# available in your script, for example: `green` or `bold`.
+# You can run `bashly add colors` to add a standard colors library.
+# This option cannot be set via environment variables.
+usage_colors:
+  caption: ~
+  command: ~
+  arg: ~
+  flag: ~
+  environment_variable: ~
+
+
+#-------------------------------------------------------------------------------
+# FEATURE TOGGLES
+#-------------------------------------------------------------------------------
+
+# Set to 'production' or 'development'.
+# Determines which features are enabled in the generated script.
+# Use the `enable_*` options below to adjust settings for each environment.
+# It is recommended to leave this set to 'development' and run
+# `bashly generate --env production` when the production version is needed.
+env: development
+
+# Tweak the script output by enabling or disabling some script output.
+# These options accept one of the following strings:
+# - production      # render this feature only when env == production
+# - development     # render this feature only when env == development
+# - always          # render this feature in any environment
+# - never           # do not render this feature
+enable_header_comment: always
+enable_bash3_bouncer: always
+enable_view_markers: development
+enable_inspect_args: development
+enable_deps_array: always
+enable_env_var_names_array: always
+enable_sourcing: development
+
+
+#-------------------------------------------------------------------------------
+# SCRIPTING OPTIONS
+#-------------------------------------------------------------------------------
+
+# These are the public global variables available for use in your partial
+# scripts. Adding a new name here will create a reference variable using
+# `declare -gn`, allowing you to access the original variable under the new
+# name in addition to its original name.
+var_aliases:
+  args: ~
+  other_args: ~
+  deps: ~
+  env_var_names: ~
+
+# Choose different names for some of the internal functions.
+function_names:
+  run: ~
+  initialize: ~

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Run this from the root directory
+
+cd ./test || exit
+source approvals.bash
+
+cd ../dist
+cli=./stash
+
+# Tests (context, describe and indentation are optional)
+describe "root command"
+  approve "$cli"
+  approve "$cli --help"

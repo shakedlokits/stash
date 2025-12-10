@@ -4,7 +4,14 @@ delete_note() {
 	result=$(osascript 2>&1 <<EOF
 tell application "Notes"
   try
+    set deletedNotesFolder to folder "Recently Deleted"
     set theNote to first note whose id is "$note_id"
+    set theFolder to container of theNote
+    
+    if theFolder is equal to deletedNotesFolder then
+      error "Note already in Recently Deleted"
+    end if
+    
     delete theNote
     return "$note_id"
   on error errMsg

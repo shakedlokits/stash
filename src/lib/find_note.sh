@@ -1,27 +1,25 @@
 find_note() {
-	local search_string="$1"
-
-	result=$(osascript <<EOF
-on run argv
-	set search_string to "$search_string"
-
-	tell application "Notes"
-		set found_notes to (every note whose body contains search_string)
-
-		if (count of found_notes) is greater than 0 then
-			set first_note to item 1 of found_notes
-			set note_name to name of first_note
-			set note_id to id of first_note
-
-			return note_id
-		else
-			return ""
-		end if
-	end tell
-end run
+	local note_id="$1"
+	
+	result=$(osascript 2>&1 <<EOF
+tell application "Notes"
+  try
+    set deletedNotesFolder to folder "Recently Deleted"
+    set theNote to first note whose id is "$note_id"
+    set theFolder to container of theNote
+    
+    if theFolder is equal to deletedNotesFolder then
+      return ""
+    end if
+    
+    return id of theNote
+  on error
+    return ""
+  end try
+end tell
 EOF
 )
-
+	
 	if [ -z "$result" ]; then
 		return 1
 	else

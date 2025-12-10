@@ -1,0 +1,10 @@
+stash - Bidirectionally sync Markdown files with Apple Notes
+
+Usage:
+  stash COMMAND
+  stash [COMMAND] --help | -h
+  stash --version | -v
+
+Commands:
+  push   Push a Markdown file to Apple Notes (create or update)
+  pull   Pull content from Apple Notes to a Markdown file

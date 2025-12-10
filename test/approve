@@ -1,13 +1,27 @@
 #!/usr/bin/env bash
 # Run this from the root directory
 
+set -e
+
 cd ./test || exit
 source approvals.bash
 
-cd ../dist
-cli=./stash
+# Set SKIP_INTEGRATION=1 to skip integration tests
+SKIP_INTEGRATION=${SKIP_INTEGRATION:-0}
 
-# Tests (context, describe and indentation are optional)
-describe "root command"
-  approve "$cli"
-  approve "$cli --help"
+# Export paths for use in test specs
+export FIXTURES_PATH="$PWD/fixtures"
+export LIB_PATH="$PWD/../src/lib"
+export CLI_PATH="$PWD/../dist/stash"
+
+# Run all spec files
+for file in *_spec.sh ; do
+  # Skip integration tests if requested
+  if [[ "$SKIP_INTEGRATION" == "1" ]] && [[ "$file" =~ ^integration_ ]]; then
+    echo "Skipping integration test: $file"
+    continue
+  fi
+  
+  context "$file"
+  ./$file
+done

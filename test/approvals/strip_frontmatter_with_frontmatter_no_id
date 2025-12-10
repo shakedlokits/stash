@@ -1,0 +1,5 @@
+# My Cool Note
+
+This note has frontmatter but no apple_notes_id field.
+
+It should work fine for testing frontmatter manipulation.

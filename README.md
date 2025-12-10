@@ -74,14 +74,15 @@ This backlog contains both current and future development items, feel free to ta
 - [ ] Basic Functionality
    - [ ] AppleScript notes access functions
       - [x] Find note
-      - [ ] Create note
-      - [ ] Delete note
+      - [x] Create note
+      - [x] Delete note
       - [ ] Update note
    - [x] Markdown front-matter parser (get-id)
    - [ ] Push command shell script
    - [ ] Push command tests
    - [ ] Pull command shell script
    - [ ] Pull command tests
+   - [x] `Pandoc` integration
    - [ ] `Bashly` setup
       - [x] CLI interface
       - [ ] Shell completion

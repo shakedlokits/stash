@@ -2,6 +2,11 @@ name: stash
 help: Bidirectionally sync Markdown files with Apple Notes
 version: 0.1.0
 
+dependencies:
+  pandoc:
+    command: [pandoc]
+    help: Install pandoc from https://pandoc.org/installing.html
+
 commands:
 - name: push
   help: Push a Markdown file to Apple Notes (create or update)

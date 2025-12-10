@@ -1,0 +1,13 @@
+---
+apple_notes_id: x-coredata://TEST/ICNote/p123
+---
+
+# My Cool Note
+
+This is a note without any frontmatter.
+
+## Features
+
+- Simple markdown
+- No YAML frontmatter
+- Just content

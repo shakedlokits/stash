@@ -1,0 +1,11 @@
+---
+title: Synced Note
+tags: synced
+apple_notes_id: x-coredata://NEW-ID/ICNote/p999
+---
+
+# Synced Note
+
+This note has been synced with Apple Notes.
+
+It has an apple_notes_id in the frontmatter.

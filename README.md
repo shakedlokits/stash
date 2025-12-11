@@ -58,6 +58,12 @@ Don't fret. Simply:
 3. It rewrites your local Markdown file with the content from Apple Notes.
    > NOTE: The front-matter is unchanged during pull operations.
 
+## Requirements
+
+- **macOS** with Apple Notes
+- **[Pandoc](https://pandoc.org/installing.html)** for Markdown ↔ HTML conversion
+- **pcregrep** for frontmatter parsing (usually pre-installed on macOS, or install via `brew install pcre`)
+
 ## Design
 
 The tool is built in three layers:
@@ -66,24 +72,27 @@ The tool is built in three layers:
 
 **Shell scripts** contain the business logic that orchestrates these AppleScript operations, managing the sync workflow and front-matter processing.
 
+**[Pandoc](https://pandoc.org)** handles the conversion between Markdown and HTML, ensuring content is properly formatted for Apple Notes.
+
 **[`Bashly`](https://bashly.dev)** ties it all together, providing a clean CLI interface, shell completions, and command scaffolding.
 
 ## Backlog & Contribution
 
 This backlog contains both current and future development items, feel free to take some or add to it:
-- [ ] Basic Functionality
-   - [ ] AppleScript notes access functions
+- [x] Basic Functionality
+   - [x] AppleScript notes access functions
       - [x] Find note
       - [x] Create note
       - [x] Delete note
-      - [ ] Update note
-   - [x] Markdown front-matter parser (get-id)
-   - [ ] Push command shell script
-   - [ ] Push command tests
-   - [ ] Pull command shell script
-   - [ ] Pull command tests
+      - [x] Update note
+      - [x] Read note
+   - [x] Markdown front-matter parser (get-id, extract, strip, update)
+   - [x] Push command shell script
+   - [x] Push command tests
+   - [x] Pull command shell script
+   - [x] Pull command tests
    - [x] `Pandoc` integration
-   - [ ] `Bashly` setup
+   - [x] `Bashly` setup
       - [x] CLI interface
       - [ ] Shell completion
       - [ ] Documentation

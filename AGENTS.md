@@ -311,9 +311,19 @@ Each implementation gate includes:
 
 - Use **Pandoc** for markdown↔HTML conversion
 - `markdown_to_html`: `pandoc -f gfm -t html --wrap=none`
-- `html_to_markdown`: `pandoc -f html -t gfm --wrap=none`
+- `html_to_markdown`: `pandoc -f html -t gfm-raw_html --wrap=none` (with post-processing)
 - Strip frontmatter before pushing to Apple Notes
 - Preserve frontmatter when pulling from Apple Notes
+
+### Apple Notes HTML Quirks
+
+Apple Notes has specific HTML behaviors that require special handling:
+
+1. **H1 to styled text**: Apple Notes converts `<h1>` tags to `<div><b><span style="font-size: 24px">...</span></b></div>`. We convert this back to `<h1>` before pandoc processing.
+2. **Div wrappers**: Apple Notes wraps content in `<div>` tags. Using `gfm-raw_html` instead of `gfm` prevents these from being passed through as raw HTML.
+3. **List separators**: Pandoc outputs `&nbsp;` between consecutive lists. We remove these with sed.
+4. **Trailing whitespace**: Apple Notes' `<div><br></div>` elements leave whitespace-only lines. We trim these.
+5. **Quote escaping**: HTML content with double quotes must be escaped (`\"`) before passing to AppleScript.
 
 ### Error Recovery
 
@@ -355,7 +365,7 @@ test-unit:      # Run unit tests only (skip integration)
 
 ## Current Implementation Status
 
-### Completed Gates (8 of 10)
+### Completed Gates (10 of 10)
 
 | Gate | Component | Description | Status |
 |------|-----------|-------------|--------|
@@ -369,15 +379,15 @@ test-unit:      # Run unit tests only (skip integration)
 | 7 | `update_note.sh` | Update note content by ID | ✅ |
 | 7.5 | `read_markdown_file.sh`, `write_markdown_file.sh` | File I/O utilities | ✅ |
 | 8 | Test reorganization | Moved tests to `test/cases/` | ✅ |
-| 9 | `push_command.sh` | Push markdown file to Apple Notes | 🔄 Next |
-| 10 | `pull_command.sh` | Pull note from Apple Notes to markdown | ⏳ |
+| 9 | `push_command.sh` | Push markdown file to Apple Notes | ✅ |
+| 10 | `pull_command.sh` | Pull note from Apple Notes to markdown | ✅ |
 
 ### Test Coverage
 
-- **Unit tests**: 32 tests (pure functions)
+- **Unit tests**: 36 tests (pure functions)
 - **Integration tests**: 11 tests (Apple Notes operations)
-- **E2E tests**: 2 tests (CLI workflows)
-- **Total**: 45 tests
+- **E2E tests**: 15 tests (CLI workflows)
+- **Total**: 62 tests
 
 ## Questions?
 

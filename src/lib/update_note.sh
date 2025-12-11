@@ -2,6 +2,9 @@ update_note() {
 	local note_id="$1"
 	local html_content="$2"
 	
+	# Escape double quotes for AppleScript string
+	local escaped_content="${html_content//\"/\\\"}"
+	
 	result=$(osascript 2>&1 <<EOF
 tell application "Notes"
   try
@@ -13,7 +16,7 @@ tell application "Notes"
       error "Note is in Recently Deleted"
     end if
     
-    set body of theNote to "$html_content"
+    set body of theNote to "$escaped_content"
     return "$note_id"
   on error errMsg
     error errMsg

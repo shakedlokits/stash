@@ -1,10 +1,13 @@
 create_note() {
 	local content="$1"
 	
+	# Escape double quotes for AppleScript string
+	local escaped_content="${content//\"/\\\"}"
+	
 	result=$(osascript 2>&1 <<EOF
 tell application "Notes"
   try
-    set newNote to make new note with properties {body:"$content"}
+    set newNote to make new note with properties {body:"$escaped_content"}
     return id of newNote
   on error errMsg
     error errMsg

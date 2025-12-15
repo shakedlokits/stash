@@ -60,12 +60,16 @@ jobs:
     needs: update-formula
     runs-on: macos-latest
     steps:
+      - name: Install bash 5
+        run: brew install bash
+
       - name: Download release asset
         run: |
           curl -L -o stash "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/stash"
           chmod +x stash
 
       - name: Verify version matches tag
+        shell: /opt/homebrew/bin/bash {0}
         run: |
           VERSION=$(./stash --version)
           TAG="${{ github.ref_name }}"

@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: brew install pcre pandoc
+
+      - name: Build CLI
+        run: |
+          mkdir -p dist
+          docker run --rm -v "$PWD:/app" dannyben/bashly generate
+
+      - name: Run unit tests
+        run: SKIP_INTEGRATION=1 make test

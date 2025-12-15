@@ -1,0 +1,77 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build CLI with bashly
+        run: |
+          mkdir -p dist
+          docker run --rm -v "$PWD:/app" dannyben/bashly generate
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/stash
+          generate_release_notes: true
+
+  update-formula:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Download release asset
+        run: |
+          curl -L -o stash "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/stash"
+
+      - name: Compute SHA256
+        id: sha
+        run: echo "sha256=$(shasum -a 256 stash | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+
+      - name: Update Formula
+        run: |
+          VERSION="${{ github.ref_name }}"
+          SHA="${{ steps.sha.outputs.sha256 }}"
+          sed -i "s|url \".*\"|url \"https://github.com/${{ github.repository }}/releases/download/${VERSION}/stash\"|" Formula/stash.rb
+          sed -i "s|sha256 \".*\"|sha256 \"${SHA}\"|" Formula/stash.rb
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/stash.rb
+          git commit -m "Update formula for ${{ github.ref_name }}"
+          git push
+
+  smoke-test:
+    needs: update-formula
+    runs-on: macos-latest
+    steps:
+      - name: Download release asset
+        run: |
+          curl -L -o stash "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/stash"
+          chmod +x stash
+
+      - name: Verify version matches tag
+        run: |
+          VERSION=$(./stash --version)
+          TAG="${{ github.ref_name }}"
+          EXPECTED="${TAG#v}"
+          if [[ "$VERSION" != "$EXPECTED" ]]; then
+            echo "Version mismatch: got '$VERSION', expected '$EXPECTED'"
+            exit 1
+          fi
+          echo "Version verified: $VERSION"

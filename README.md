@@ -60,6 +60,19 @@ Don't fret. Simply:
 3. It rewrites your local Markdown file with the content from Apple Notes.
    > NOTE: The front-matter is unchanged during pull operations.
 
+## Installation
+
+### Homebrew (recommended)
+
+```bash
+brew tap shakedlokits/stash
+brew install stash
+```
+
+### Manual
+
+Download the latest release from [GitHub Releases](https://github.com/shakedlokits/stash/releases) and place it in your PATH.
+
 ## Requirements
 
 - **macOS** with Apple Notes

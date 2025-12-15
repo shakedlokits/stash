@@ -6,6 +6,9 @@ dependencies:
   pandoc:
     command: [pandoc]
     help: Install pandoc from https://pandoc.org/installing.html
+  pcregrep:
+    command: [pcregrep]
+    help: Install pcre (includes pcregrep) - e.g., 'brew install pcre' on macOS
 
 commands:
 - name: push

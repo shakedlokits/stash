@@ -434,7 +434,7 @@ The `Formula/stash.rb` is automatically updated by the release pipeline with the
 4. **Don't forget cleanup**: Always delete test notes in integration tests
 5. **Don't use fancy formatting**: Keep error messages simple and clear
 6. **Don't advance without approval**: Wait for explicit go-ahead between gates
-7. **NEVER push to GitHub automatically**: Always let the user review and push changes manually
+7. **NEVER touch git automatically**: Never commit, push, or run any git commands without explicit user request. Always let the user review changes and handle git operations manually
 
 ## Tools and Dependencies
 

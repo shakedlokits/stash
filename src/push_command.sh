@@ -1,5 +1,6 @@
 # Read markdown content from file
 file_path="${args[file]}"
+folder_name="${args[--folder]:-}"
 
 if [ ! -f "$file_path" ]; then
 	echo "Error: File not found: $file_path" >&2
@@ -33,9 +34,9 @@ if [ -z "$note_found" ]; then
 	# Strip frontmatter and convert to HTML
 	echo "Creating note..."
 	html_content=$(echo "$markdown_content" | strip_frontmatter | markdown_to_html)
-	
-	# Create new note
-	new_note_id=$(create_note "$html_content")
+
+	# Create new note (optionally in specified folder)
+	new_note_id=$(create_note "$html_content" "$folder_name")
 	if [ -z "$new_note_id" ]; then
 		echo "Error: Failed to create note" >&2
 		exit 1

@@ -21,6 +21,12 @@ commands:
     required: true
     help: Path to the Markdown file to push
 
+  flags:
+  - long: --folder
+    short: -f
+    arg: name
+    help: Apple Notes folder to create note in (created if doesn't exist)
+
 - name: pull
   help: Pull content from Apple Notes to a Markdown file
   completions:
